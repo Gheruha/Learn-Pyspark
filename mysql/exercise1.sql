@@ -1,21 +1,28 @@
--- Exercise src/dataframe_api/exercise1 done in MySQL
+-- Exercise src/dataframe_api/exercise2 done in MySQL
 /*
-Goal: From employees table, build a cleaned view of people hired since 2000-01-01, compute their tenure, bucket them into bands, and list the 10 most recent hires.
+Compute each employee’s current salary from salaries (filter to_date='9999-01-01').
+Map each employee to their current department from dept_emp (same to_date filter).
+Compute the average current salary per department.
+Return the top 3 departments by that average, also include the employee count used in the average.
 */
 USE EMPLOYEES
-DROP VIEW IF EXISTS exercise1_1;
+DROP VIEW IF EXISTS exercise_2;
 
--- Creating view
-CREATE VIEW exercise1_1 AS
+CREATE VIEW exercise_2 AS
 SELECT
-  *
+  e.emp_no,
+  e.first_name,
+  e.last_name,
+  s.salary
 FROM
-  EMPLOYEES
+  employees e
+  INNER JOIN salaries s ON e.emp_no = s.emp_no
 WHERE
-  YEAR (hire_date) >= 2000;
+  s.to_date = '9999-01-01'
+LIMIT
+  20;
 
--- Selecting from view
 SELECT
   *
 FROM
-  exercise1_1;
+  exercise_2;
