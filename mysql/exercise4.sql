@@ -9,13 +9,23 @@ Aim for one SQL statement.
 */
 USE Employees;
 
--- SELECT
---   e.first_name,
---   e.second_name
--- FROM
---   employees
---   INNER JOIN dept_emp de ON e.emp_no = de.emp_no;
 SELECT
-  *
+  d.dept_name,
+  COUNT(*) AS nr_of_emp,
+  ROUND(AVG(s.salary)) avg_salary
 FROM
-  employees;
+  departments d
+  INNER JOIN dept_emp de ON de.dept_no = d.dept_no
+  AND de.to_date = "9999-01-01"
+  INNER JOIN salaries s ON s.emp_no = de.emp_no
+  AND s.to_date = "9999-01-01"
+GROUP BY
+  d.dept_no,
+  d.dept_name
+HAVING
+  COUNT(*) >= 50
+ORDER BY
+  avg_salary DESC,
+  d.dept_no ASC
+LIMIT
+  3;
